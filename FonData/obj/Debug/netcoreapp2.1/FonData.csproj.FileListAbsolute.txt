@@ -1,0 +1,11 @@
+C:\Users\PC\source\repos\FON- AJMOMI!\FonData\bin\Debug\netcoreapp2.1\FonData.deps.json
+C:\Users\PC\source\repos\FON- AJMOMI!\FonData\bin\Debug\netcoreapp2.1\FonData.dll
+C:\Users\PC\source\repos\FON- AJMOMI!\FonData\obj\Debug\netcoreapp2.1\FonData.csprojAssemblyReference.cache
+C:\Users\PC\source\repos\FON- AJMOMI!\FonData\obj\Debug\netcoreapp2.1\FonData.csproj.CoreCompileInputs.cache
+C:\Users\PC\source\repos\FON- AJMOMI!\FonData\obj\Debug\netcoreapp2.1\FonData.AssemblyInfoInputs.cache
+C:\Users\PC\source\repos\FON- AJMOMI!\FonData\obj\Debug\netcoreapp2.1\FonData.AssemblyInfo.cs
+C:\Users\PC\source\repos\FON- AJMOMI!\FonData\bin\Debug\netcoreapp2.1\FonData.runtimeconfig.json
+C:\Users\PC\source\repos\FON- AJMOMI!\FonData\bin\Debug\netcoreapp2.1\FonData.runtimeconfig.dev.json
+C:\Users\PC\source\repos\FON- AJMOMI!\FonData\bin\Debug\netcoreapp2.1\FonData.pdb
+C:\Users\PC\source\repos\FON- AJMOMI!\FonData\obj\Debug\netcoreapp2.1\FonData.dll
+C:\Users\PC\source\repos\FON- AJMOMI!\FonData\obj\Debug\netcoreapp2.1\FonData.pdb
