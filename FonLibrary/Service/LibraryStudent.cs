@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace FonService.Service
 {
@@ -20,11 +21,11 @@ namespace FonService.Service
             _db = db;
         }
 
-        public Student PrijaviKorisnika(string username, string password)
+        public async Task<Student> PrijaviKorisnika(string username, string password)
         {
             try
             {
-                var student = _db.Student.SingleOrDefault((stud) => stud.Username.Equals(username));
+                var student = await _db.Student.SingleOrDefaultAsync((stud) => stud.Username.Equals(username));
                 if (student is null) return null;
                 string passBaza = Encoding.UTF8.GetString(student.PasswordHash);
                 if (passBaza != password) return null;
@@ -37,11 +38,11 @@ namespace FonService.Service
 
         }
 
-        public bool AddStudent(StudentRegister student)
+        public async Task<bool> AddStudent(StudentRegister student)
         {
             try
             {
-                Student s = CreateStudent(student);
+                Student s = await CreateStudent(student);
 
                 _db.Add(s);
                 _db.SaveChanges();
@@ -53,7 +54,7 @@ namespace FonService.Service
             }
         }
 
-        private Student CreateStudent(StudentRegister register)
+        private async Task<Student> CreateStudent(StudentRegister register)
         {
             Student s = new Student()
             {
@@ -75,11 +76,11 @@ namespace FonService.Service
             return s;
         }
 
-        public bool DeleteStudent(int id)
+        public async Task<bool> DeleteStudent(int id)
         {
             try
             {
-                var student = VratiStudenta(id);
+                var student = await VratiStudenta(id);
                 if (student is null) return false;
                 _db.Entry(student).State = EntityState.Deleted;
                 _db.SaveChanges();
@@ -91,14 +92,14 @@ namespace FonService.Service
             }
         }
 
-        public bool UpdateStudent(StudentRegister student)
+        public async Task<bool> UpdateStudent(StudentRegister student)
         {
             try
             {
-                var studentUpdate = VratiStudenta(student.StudentId);
+                var studentUpdate = await VratiStudenta(student.StudentId);
                 if (studentUpdate is null) return false;
                 student.StudentId = student.StudentId;
-                Student studentNov = CreateStudent(student);
+                Student studentNov = await CreateStudent(student);
                 _db.Entry(studentUpdate).CurrentValues.SetValues(studentNov);
                 _db.SaveChanges();
                 return true;
@@ -110,17 +111,17 @@ namespace FonService.Service
 
         }
 
-        public IEnumerable<StudentskaOrganizacija> VratiOrganizacijeClan(Student st)
+        public async Task<IEnumerable<StudentskaOrganizacija>> VratiOrganizacijeClan(Student st)
         {
             try
             {
 
-                var student = VratiStudenta(st.StudentId);
+                var student = await VratiStudenta(st.StudentId);
                 if (student is null) return null;
-                var ogranizacije = _db.ClanOrganizacije
+                var ogranizacije = await _db.ClanOrganizacije
                     .Where((clan) => clan.Student.StudentId == st.StudentId)
-                    .Select((clan) => clan.StudentskaOrganizacija);
-
+                    .Select((clan) => clan.StudentskaOrganizacija)
+                    .ToListAsync();
                 return ogranizacije;
             }
             catch (Exception)
@@ -130,11 +131,11 @@ namespace FonService.Service
             
         }
 
-        public Student VratiStudenta(int id)
+        public async Task<Student> VratiStudenta(int id)
         {
             try
             {
-                var student = _db.Student.SingleOrDefault(student2 => student2.StudentId == id);
+                var student = await _db.Student.SingleOrDefaultAsync(student2 => student2.StudentId == id);
                 return student;
             }
             catch (Exception)
@@ -143,11 +144,11 @@ namespace FonService.Service
             }
         }
        
-        public IEnumerable<Student> VratiStudente()
+        public async Task<IEnumerable<Student>> VratiStudente()
         {
             try
             {
-                var studenti = _db.Student;
+                var studenti =await _db.Student.ToListAsync();
                 return studenti;
             }
             catch (Exception)
@@ -157,18 +158,18 @@ namespace FonService.Service
               
         }
        
-        public IEnumerable<StudentskaOrganizacija> VratiSubscribeStudenta(int id)
+        public async Task<IEnumerable<StudentskaOrganizacija>> VratiSubscribeStudenta(int id)
         {
             try
             {
 
-                var student = VratiStudenta(id);
+                var student = await VratiStudenta(id);
                 if (student is null) return null;
-                var subscribe = _db.Subscribe
+                var subscribe = await _db.Subscribe
                     .Where((clan) => clan.Student.StudentId == id)
                     .Select((clan) => clan.StudentskaOrganizacija)
-                    .Include((org) => org.Predsednik);
-
+                    .Include((org) => org.Predsednik)
+                    .ToListAsync(); 
                 return subscribe;
             }
             catch (Exception)
@@ -178,13 +179,13 @@ namespace FonService.Service
 
         }
 
-        public IEnumerable<Student> PronadjiStudente(string kriterijumPretrage)
+        public async Task<IEnumerable<Student>> PronadjiStudente(string kriterijumPretrage)
         {
             try
             {
-                var studenti = VratiStudente()
-                        .Where((stud) => stud.Ime.Contains(kriterijumPretrage) || stud.Prezime.Contains(kriterijumPretrage)
-                        || stud.Username.Contains(kriterijumPretrage));
+                var studenti = await VratiStudente();
+                studenti.Where((stud) => stud.Ime.Contains(kriterijumPretrage) || stud.Prezime.Contains(kriterijumPretrage)
+                    || stud.Username.Contains(kriterijumPretrage));
                 return studenti;
             }
             catch (Exception)

@@ -22,9 +22,9 @@ namespace Fon.Controllers
 
         }
         [HttpGet]
-        public ActionResult<IEnumerable<Sektor>> VratiObavestenja()
+        public async Task<ActionResult<IEnumerable<Sektor>>> VratiObavestenja()
         {
-            var obavestenja = _sektor.VratiSektore();
+            var obavestenja = await _sektor.VratiSektore();
             if (obavestenja is null) return NotFound();
             return Ok(obavestenja);
         }

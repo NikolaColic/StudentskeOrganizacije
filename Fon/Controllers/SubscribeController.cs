@@ -26,35 +26,35 @@ namespace Fon.Controllers
 
         
         [HttpGet(Name ="VratiSubscribe")]
-        public ActionResult<IEnumerable<Subscribe>> VratiSubscribe()
+        public async Task<ActionResult<IEnumerable<Subscribe>>> VratiSubscribe()
         {
-            var subscribe = _subscribe.GetSubscribe();
+            var subscribe = await _subscribe.GetSubscribe();
             if (subscribe is null) return NotFound();
             return Ok(subscribe);
         }
 
         
         [HttpPost]
-        public ActionResult AddSubscribe([FromBody] SubscribeCreate subscribe)
+        public async Task<ActionResult> AddSubscribe([FromBody] SubscribeCreate subscribe)
         {
-            if (_subscribe.AddSubscribe(subscribe)) return RedirectToRoute("VratiSubscribe");
+            if (await _subscribe.AddSubscribe(subscribe)) return RedirectToRoute("VratiSubscribe");
             return NotFound();
         }
 
         
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] SubscribeCreate subscribe)
+        public async Task<ActionResult> Put(int id, [FromBody] SubscribeCreate subscribe)
         {
-            if (_subscribe.UpdateSubscribe(id,subscribe)) return RedirectToRoute("VratiSubscribe");
+            if (await _subscribe.UpdateSubscribe(id,subscribe)) return RedirectToRoute("VratiSubscribe");
             return NotFound();
         }
 
         
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
             Subscribe s = new Subscribe() { SubscribeId = id };
-            if (_subscribe.DeleteSubscribe(s)) return Ok(_subscribe.GetSubscribe());
+            if (await _subscribe.DeleteSubscribe(s)) return Ok(_subscribe.GetSubscribe());
             return NotFound();
         }
     }

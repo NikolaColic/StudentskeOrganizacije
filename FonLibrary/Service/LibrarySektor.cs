@@ -4,7 +4,9 @@ using FonData.Models.SlabeKlase;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace FonService.Service
 {
@@ -17,11 +19,11 @@ namespace FonService.Service
             _db = db;
         }
 
-        public IEnumerable<Sektor> VratiSektore()
+        public async Task<IEnumerable<Sektor>> VratiSektore()
         {
             try
             {
-                var sektori = _db.Sektor;
+                var sektori = await _db.Sektor.ToListAsync();
                 return sektori;
             }
             catch (Exception)

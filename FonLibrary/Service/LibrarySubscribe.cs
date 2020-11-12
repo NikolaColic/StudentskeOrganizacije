@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace FonService.Service
 {
@@ -20,14 +21,14 @@ namespace FonService.Service
             _db = db;
         }
 
-        public bool AddSubscribe(SubscribeCreate subscribe)
+        public async Task<bool> AddSubscribe(SubscribeCreate subscribe)
         {
             try
             {
                 Subscribe s = KreirajSubscribe(subscribe);
                 if (s.Student is null || s.StudentskaOrganizacija is null) return false;
-                _db.Add(s);
-                _db.SaveChanges();
+                await _db.AddAsync(s);
+                await _db.SaveChangesAsync();
                 return true;
             }
             catch (Exception)
@@ -36,14 +37,14 @@ namespace FonService.Service
             }
         }
 
-        public bool DeleteSubscribe(Subscribe s)
+        public async Task<bool> DeleteSubscribe(Subscribe s)
         {
             try
             {
-                var subscribe = VratiSubscribeId(s.SubscribeId);
+                var subscribe = await VratiSubscribeId(s.SubscribeId);
                 if (subscribe is null) return false;
                 _db.Entry(subscribe).State = EntityState.Deleted;
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
                 return true;
             }
             catch (Exception)
@@ -63,16 +64,16 @@ namespace FonService.Service
             return s;
         }
 
-        public bool UpdateSubscribe(int id, SubscribeCreate subscribe)
+        public async Task<bool> UpdateSubscribe(int id, SubscribeCreate subscribe)
         {
             try
             {
                 Subscribe s = KreirajSubscribe(subscribe);
-                var staraVrednost = VratiSubscribeId(id);
+                var staraVrednost = await VratiSubscribeId(id);
                 if (staraVrednost is null) return false;
                 s.SubscribeId = id;
                 _db.Entry(staraVrednost).CurrentValues.SetValues(s);
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
                 return true;
             }
             catch (Exception)
@@ -81,11 +82,11 @@ namespace FonService.Service
             }
         }
 
-        private Subscribe VratiSubscribeId(int id)
+        private async Task<Subscribe> VratiSubscribeId(int id)
         {
             try
             {
-                var sub = _db.Subscribe.SingleOrDefault((su) => su.SubscribeId == id);
+                var sub = await _db.Subscribe.SingleOrDefaultAsync((su) => su.SubscribeId == id);
                 return sub;
             }
             catch (Exception)
@@ -94,13 +95,14 @@ namespace FonService.Service
             }
         }
 
-        public IEnumerable<Subscribe> GetSubscribe()
+        public async Task<IEnumerable<Subscribe>> GetSubscribe()
         {
             try
             {
-                var subscribe = _db.Subscribe
+                var subscribe = await _db.Subscribe
                         .Include(s => s.Student)
-                        .Include(s => s.StudentskaOrganizacija);
+                        .Include(s => s.StudentskaOrganizacija)
+                        .ToListAsync();
                 return subscribe;
             }
             catch (Exception)

@@ -2,12 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace FonData.Interface
 {
     public interface ILibrarySektor
     {
-        IEnumerable<Sektor> VratiSektore();
+         Task<IEnumerable<Sektor>> VratiSektore();
 
     }
 }

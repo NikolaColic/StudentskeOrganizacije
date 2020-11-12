@@ -40,7 +40,7 @@ namespace Fon.Controllers
 
             try
             {
-                var studenti = _student.VratiStudente();
+                var studenti = await _student.VratiStudente();
                 var noviStudenti = CreateStudent(studenti);
                 return Ok(noviStudenti);
             }
@@ -79,7 +79,7 @@ namespace Fon.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<AuthenticateResponse>> Authenticate([FromBody]AuthenticateRequest request)
         {
-            var student = _student.PrijaviKorisnika(request.Username, request.Password);
+            var student = await _student.PrijaviKorisnika(request.Username, request.Password);
             if (student is null) return NotFound();
 
             var tokenString = CreateToken(student);
@@ -117,11 +117,11 @@ namespace Fon.Controllers
 
         // GET: api/Igrac/5
         [HttpGet("{id}")]
-        public ActionResult<Student> VratiJednog(int id)
+        public async Task<ActionResult<Student>> VratiJednog(int id)
         {
             try
             {
-                var student = _student.VratiStudenta(id);
+                var student = await _student.VratiStudenta(id);
                 if (student is null) return NotFound();
                 return Ok(student);
             }
@@ -132,19 +132,19 @@ namespace Fon.Controllers
         }
 
         [HttpGet("{id}/clan")]
-        public ActionResult<IEnumerable<StudentskaOrganizacija>> VratiClanId(int id)
+        public async Task<ActionResult<IEnumerable<StudentskaOrganizacija>>> VratiClanId(int id)
         {
             Student st = new Student() { StudentId = id };
-            var clan = _student.VratiOrganizacijeClan(st);
+            var clan = await _student.VratiOrganizacijeClan(st);
             if (clan is null) return NotFound();
             return Ok(clan);
            
         }
 
         [HttpGet("{id}/subscribe")]
-        public ActionResult<IEnumerable<StudentskaOrganizacija>> VratiSubscribeId(int id)
+        public async Task<ActionResult<IEnumerable<StudentskaOrganizacija>>> VratiSubscribeId(int id)
         {
-            var clan = _student.VratiSubscribeStudenta(id);
+            var clan = await _student.VratiSubscribeStudenta(id);
             if (clan is null) return NotFound();
             return Ok(clan);
 
@@ -155,27 +155,27 @@ namespace Fon.Controllers
         // POST: api/Igrac
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult<IEnumerable<Student>> AddStudent([FromBody] StudentRegister student)
+        public async Task<ActionResult<IEnumerable<Student>>> AddStudent([FromBody] StudentRegister student)
         {
-            if (_student.AddStudent(student)) return RedirectToRoute("VratiStudente1");
+            if ( await _student.AddStudent(student)) return RedirectToRoute("VratiStudente1");
             return NotFound();
         }
 
         // PUT: api/Igrac/5
         [HttpPut("{id}")]
         [AllowAnonymous]
-        public ActionResult<IEnumerable<Student>> Put(int id, [FromBody] StudentRegister student)
+        public async Task<ActionResult<IEnumerable<Student>>> Put(int id, [FromBody] StudentRegister student)
         {
             student.StudentId = id;
-            if (_student.UpdateStudent(student)) return Ok(_student.VratiStudente());
+            if (await _student.UpdateStudent(student)) return Ok(_student.VratiStudente());
             return NotFound();
         }
 
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            if (_student.DeleteStudent(id)) return NoContent();
+            if (await _student.DeleteStudent(id)) return NoContent();
             return NotFound();
         }
     }
