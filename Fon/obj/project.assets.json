@@ -4458,7 +4458,7 @@
           "System.Runtime": "4.3.0"
         },
         "compile": {
-          "ref/netstandard1.3/_._": {}
+          "ref/netstandard1.3/System.Threading.Thread.dll": {}
         },
         "runtime": {
           "lib/netstandard1.3/System.Threading.Thread.dll": {}
@@ -4634,7 +4634,8 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v2.1",
         "dependencies": {
-          "FonData": "1.0.0"
+          "FonData": "1.0.0",
+          "System.Threading.Thread": "4.3.0"
         },
         "compile": {
           "bin/placeholder/FonService.dll": {}

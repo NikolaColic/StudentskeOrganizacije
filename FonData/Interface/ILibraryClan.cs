@@ -3,13 +3,14 @@ using FonData.ModelsCreate;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace FonData.Interface
 {
     public interface ILibraryClan
     {
-        IEnumerable<ClanOrganizacije> VratiClanove();
+        Task<IEnumerable<ClanOrganizacije>> VratiClanove();
         bool DodajClana(SubscribeCreate subscribe);
-        bool DeleteClan(int id);
+        Task<bool> DeleteClan(int id);
     }
 }

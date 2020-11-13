@@ -657,7 +657,8 @@
       },
       "FonService/1.0.0": {
         "dependencies": {
-          "FonData": "1.0.0"
+          "FonData": "1.0.0",
+          "System.Threading.Thread": "4.3.0"
         },
         "runtime": {
           "FonService.dll": {}
