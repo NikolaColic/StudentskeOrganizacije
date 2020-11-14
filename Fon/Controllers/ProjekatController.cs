@@ -24,9 +24,9 @@ namespace Fon.Controllers
 
         }
         [HttpGet]
-        public ActionResult<IEnumerable<Projekat>> VratiProjekte()
+        public async Task<ActionResult<IEnumerable<Projekat>>> VratiProjekte()
         {
-            var obavestenja = _projekat.VratiProjekte();
+            var obavestenja = await _projekat.VratiProjekte();
             if (obavestenja is null) return NotFound();
             return Ok(obavestenja);
         }

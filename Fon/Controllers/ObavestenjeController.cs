@@ -24,11 +24,16 @@ namespace Fon.Controllers
 
         }
         [HttpGet]
-        public ActionResult<IEnumerable<Obavestenje>> VratiObavestenja()
+        [AllowAnonymous]
+        public  ActionResult<IEnumerable<Obavestenje>> VratiObavestenja()
         {
-            var obavestenja = _obavestenje.VratiObavestenja();
-            if (obavestenja is null) return NotFound();
-            return Ok(obavestenja);
+            var obavestenja = Task.Run( async () =>
+            {
+                return await _obavestenje.VratiObavestenja();
+            });
+
+            if (obavestenja.Result is null) return NotFound();
+            return Ok(obavestenja.Result);
         }
 
     }

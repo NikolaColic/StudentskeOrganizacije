@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace FonService.Service
 {
@@ -16,12 +17,13 @@ namespace FonService.Service
         {
             _db = db;
         }
-        public IEnumerable<Projekat> VratiProjekte()
+        public async Task<IEnumerable<Projekat>> VratiProjekte()
         {
             try
             {
-                var projekti = _db.Projekat
-                           .Include(p => p.StudentskaOrganizacija);
+                var projekti = await _db.Projekat
+                           .Include(p => p.StudentskaOrganizacija)
+                           .ToListAsync();
                            
                 return projekti;
             }

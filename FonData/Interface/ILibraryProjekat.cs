@@ -2,11 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace FonData.Interface
 {
     public interface ILibraryProjekat
     {
-        IEnumerable<Projekat> VratiProjekte();
+        Task<IEnumerable<Projekat>> VratiProjekte();
     }
 }

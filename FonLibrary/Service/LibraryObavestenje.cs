@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace FonService.Service
 {
@@ -18,15 +19,15 @@ namespace FonService.Service
             _db = db;
         }
 
-        public IEnumerable<Obavestenje> VratiObavestenja()
+        public async Task<IEnumerable<Obavestenje>> VratiObavestenja()
         {
             try
             {
-                var obavestenja = _db.Obavestenje
-
+                var obavestenja = await _db.Obavestenje
                         .Include((o) => o.StudentskaOrganizacija)
                         .Include((o) => o.DrustvenaMreza)
-                        .OrderByDescending((o) => o.Datum);
+                        .OrderByDescending((o) => o.Datum)
+                        .ToListAsync();
                  return obavestenja;
             }
             catch (Exception)
@@ -34,5 +35,9 @@ namespace FonService.Service
                 return null;
             }
         }
+    }
+
+    public class TaskIEnumerable<T>
+    {
     }
 }
